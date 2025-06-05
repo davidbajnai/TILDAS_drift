@@ -190,34 +190,77 @@ def add_linfit_and_stats(ax, x, y):
         p_str = r"$\it{p}$ = " + f"{p_value:.1g}"
 
     txt = f"{R2_str}\n{p_str}"
-    ax.text(0.77, 0.02, txt, transform=ax.transAxes,
-            va='bottom', ha='left', color="k",
+    ax.text(0.77, 0.98, txt, transform=ax.transAxes,
+            va='top', ha='left', color="k",
             bbox=dict(fc='white', alpha=0.8, ec='none', pad=0.2, boxstyle='round'))
 
 
+def add_linfit_and_stats_95(ax, x, y):
+
+    # Filter values to 95% in y
+    mask = y <= np.nanpercentile(y, 90)
+    x = x[mask]
+    y = y[mask]
+
+    # Linear fit
+    slope, intercept, r_value, p_value, std_err = linregress(x, y)
+    xx = np.array([np.nanmin(x), np.nanmax(x)])
+    yy = slope * xx + intercept
+    ax.plot(xx, yy, ls="--", c="r")
+    R2_val = r_value**2
+    if R2_val >= 0.1:
+        R2_str = r"$R^2$ = " + f"{R2_val:.1g}"
+    else:
+        R2_str = r"$R^2 < 0.1$"
+
+    if p_value < 0.05:
+        p_str = r"$\it{p} < 0.05$"
+    else:
+        p_str = r"$\it{p}$ = " + f"{p_value:.1g}"
+
+    txt = f"{R2_str}\n{p_str}"
+    ax.text(0.45, 0.98, txt, transform=ax.transAxes,
+            va='top', ha='left', color="r",
+            bbox=dict(fc='white', alpha=0.8, ec='none', pad=0.2, boxstyle='round'))
+    
+    print(f"90% filtered data maximum value: {y.max():.1f}")
+
+
+
+# Left column - Göttingen
 axes[0].scatter(df_ug['Dp17O_error'], df_ug['pCO2Mismatch_error'], 
                 facecolor="#1455C080", ec="#1455C0")
 add_linfit_and_stats(axes[0], df_ug['Dp17O_error'], df_ug['pCO2Mismatch_error'])
+print(f"UG, maximum x626 mismatch stability: {df_ug['pCO2Mismatch_error'].max():.1f} µmol/mol\n")
 
 axes[2].scatter(df_ug['Dp17O_error'], torr_to_pascal(df_ug['PCellMismatch_error']), 
                 facecolor="#1455C080", ec="#1455C0")
 add_linfit_and_stats(axes[2], df_ug['Dp17O_error'], torr_to_pascal(df_ug['PCellMismatch_error']))
+print(f"UG, maximum pressure mismatch stability: {torr_to_pascal(df_ug['PCellMismatch_error']).max():.1f} Pa, {df_ug['PCellMismatch_error'].max()*1000:.1f} mTorr\n")
 
 axes[4].scatter(df_ug['Dp17O_error'], df_ug['TCellMismatch_error']*1000, 
                 facecolor="#1455C080", ec="#1455C0")
 add_linfit_and_stats(axes[4], df_ug['Dp17O_error'], df_ug['TCellMismatch_error']*1000)
+print(f"UG, maximum temperature mismatch stability: {df_ug['TCellMismatch_error'].max()*1000:.0f} mK\n")
 
+# Right column - Cape Town
 axes[1].scatter(df_uct['Dp17O_error'], df_uct['std_mismatch_Xp626_L2']/1000, 
                 fc="#81499780", ec="#814997")
 add_linfit_and_stats(axes[1], df_uct['Dp17O_error'], df_uct['std_mismatch_Xp626_L2']/1000)
+add_linfit_and_stats_95(axes[1], df_uct['Dp17O_error'], df_uct['std_mismatch_Xp626_L2']/1000)
+print(f"UCT, maximum x626 mismatch stability: {df_uct['std_mismatch_Xp626_L2'].max()/1000:.1f} µmol/mol\n")
 
 axes[3].scatter(df_uct['Dp17O_error'], torr_to_pascal(df_uct['std_mismatch_Praw']), 
                 fc="#81499780", ec="#814997")
 add_linfit_and_stats(axes[3], df_uct['Dp17O_error'], torr_to_pascal(df_uct['std_mismatch_Praw']))
+add_linfit_and_stats_95(axes[3], df_uct['Dp17O_error'], torr_to_pascal(df_uct['std_mismatch_Praw']))
+print(f"UCT, maximum pressure mismatch stability: {torr_to_pascal(df_uct['std_mismatch_Praw']).max():.1f} Pa, {df_uct['std_mismatch_Praw'].max()*1000:.1f} mTorr\n")
 
 axes[5].scatter(df_uct['Dp17O_error'], df_uct['std_mismatch_Traw']*1000, 
                 fc="#81499780", ec="#814997")
 add_linfit_and_stats(axes[5], df_uct['Dp17O_error'], df_uct['std_mismatch_Traw']*1000)
+add_linfit_and_stats_95(axes[5], df_uct['Dp17O_error'], df_uct['std_mismatch_Traw']*1000)
+print(f"UCT, maximum temperature mismatch stability: {df_uct['std_mismatch_Traw'].max()*1000:.0f} mK\n")
 
 # ax.set_xlabel("devmean_chi_p_626")
 axes[4].set_xlabel("Internal $\Delta\prime^{17}O$ error (ppm)")

@@ -38,7 +38,7 @@ figures_dir = os.path.join(script_dir, '../figures')
 plt.rcParams.update({"font.size": 8})
 plt.rcParams["patch.linewidth"] = 0.5
 plt.rcParams['lines.linewidth'] = 0.5
-plt.rcParams["savefig.dpi"] = 800
+plt.rcParams["savefig.dpi"] = 300
 plt.rcParams["savefig.bbox"] = "tight"
 plt.rcParams['savefig.transparent'] = False
 plt.rcParams['mathtext.default'] = 'regular'
