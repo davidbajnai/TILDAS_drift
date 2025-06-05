@@ -30,7 +30,7 @@ plt.rcParams.update({"font.size": 8})
 plt.rcParams["figure.figsize"] = (5, 6)
 plt.rcParams["patch.linewidth"] = 1
 plt.rcParams['lines.linewidth'] = 1
-plt.rcParams["savefig.dpi"] = 600
+plt.rcParams["savefig.dpi"] = 300
 plt.rcParams["savefig.bbox"] = "tight"
 plt.rcParams['savefig.transparent'] = False
 plt.rcParams['mathtext.default'] = 'regular'
