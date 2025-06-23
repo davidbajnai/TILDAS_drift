@@ -3,7 +3,7 @@ This script retrieves absorption coefficients from the HITRAN database, and visu
 It also imports experimental data from a CSV file and plots it alongside the HITRAN data.
 
 INPUT:
-- 250521_003216_001_SIG.csv: A CSV file containing experimental data.
+- 250521_003216_001_SIG.csv: A CSV file containing spectral data retreived from a correspondingly named .spb file.
 - HITRAN database files (optional): Required for calculating absorption coefficients.
         If not present, the script will attempt to fetch them.
 

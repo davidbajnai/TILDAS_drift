@@ -49,6 +49,11 @@ df_uct["Dp17O"] = df_uct['mean_Dp17OL2']*1000
 df_uct_zero = df_uct[df_uct['Sample'].str.contains("ZERO")].copy()
 df_uct_603 = df_uct[df_uct['Sample'].str.contains("603")].copy()
 
+# Get data - University of Cape Town
+df_uct2 = pd.read_csv(os.path.join(data_dir, "LT Table S3b.csv"))
+df_uct2['pCO2Mismatch'] = df_uct2['mismatch_Xp626_L2']/1000
+df_uct2["Dp17O"] = df_uct2['Dp17O_raw_mean']*1000
+
 # Get data - University of Göttingen
 df_ug = pd.read_csv(os.path.join(data_dir, "LT Table S4.csv"))
 df_ug['SampleName'] = df_ug['SampleName'].str.replace("VsRef", " $CO_2$")
@@ -69,15 +74,19 @@ fig, ax = plt.subplots()
 datasets = [
     (df_ug_light['pCO2Mismatch'], df_ug_light['Dp17O'], c_light, "light CO$_{2}$ (UG)"),
     (df_ug_heavy['pCO2Mismatch'], df_ug_heavy['Dp17O'], c_heavy, "heavy CO$_{2}$ (UG)"),
-    (df_uct_603['pCO2Mismatch'], df_uct_603['Dp17O'], c_IAEA603, "IAEA-603 (UCT)"),
-    (df_uct_zero['pCO2Mismatch'], df_uct_zero['Dp17O'], c_zero, "zero-enrichment (UCT)"),
+    (df_uct_zero['pCO2Mismatch'], df_uct_zero['Dp17O'], c_zero, "zero-enrichment (UCT, 2025)"),
+    (df_uct_603['pCO2Mismatch'], df_uct_603['Dp17O'], c_IAEA603, "IAEA-603 (UCT, 2025)"),
+    (df_uct2['pCO2Mismatch'], df_uct2['Dp17O'], c_IAEA603, "IAEA-603 (UCT, 2024)"),
 ]
 
 for x, y, color, label in datasets:
     slope, intercept, r_value, p_value, std_err = linregress(x, y)
     x_line = np.linspace(x.min(), x.max(), 100)
     ax.plot(x_line, slope * x_line + intercept, color=color, linestyle="-")
-    ax.scatter(x, y, ec=color, fc = f"{color}80" , label = f"{label}\n$\it{{m}}$ = {slope:.1f}$\pm${std_err:.1f}  $\it{{N}}$ = {len(x)}")
+    marker = 'v' if '2024' in label and 'IAEA' in label else 'o'
+    ax.scatter(x, y,
+               ec=color, fc=f"{color}80", marker=marker,
+               label=f"{label}\n$\it{{m}}$ = {slope:.1f}$\pm${std_err:.1f}  $\it{{N}}$ = {len(x)}")
 
 
 ax.legend(loc="upper left", bbox_to_anchor=(1, 1.02))
