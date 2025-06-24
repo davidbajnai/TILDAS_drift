@@ -2,13 +2,13 @@
 This sccript shows the long-term drift of the of ∆17O measurements.
 
 INPUT:
-- LT Table S1.csv: A CSV file containing data from the University of Göttingen.
-- LT Table S2.csv: A CSV file containing data from the University of Cape Town.
+- LT_Table_S1.csv: A CSV file containing data from the University of Göttingen.
+- LT_Table_S2.csv: A CSV file containing data from the University of Cape Town.
 
 OUTPUT:
-- LT Figure 7.png: A plot showing the long-term drift of ∆17O measurements at the University of Göttingen.
-- LT Figure 8.png: A plot showing the correlation coefficients from the multivariate linear regression models.
-- LT Figure 9.png: A plot showing the long-term drift of ∆17O measurements at the University of Cape Town.
+- LT_Figure_7.png: A plot showing the long-term drift of ∆17O measurements at the University of Göttingen.
+- LT_Figure_8.png: A plot showing the correlation coefficients from the multivariate linear regression models.
+- LT_Figure_9.png: A plot showing the long-term drift of ∆17O measurements at the University of Cape Town.
 """
 
 # Import libraries
@@ -49,7 +49,7 @@ c_NBS18, c_IAEA603 = "#F75056", "#641E32"
 c_light, c_heavy = "#309FD1", "#0C3992"
 
 # Get data - University of Cape Town
-df_uct = pd.read_csv(os.path.join(data_dir, "LT Table S2.csv"))
+df_uct = pd.read_csv(os.path.join(data_dir, "LT_Table_S2.csv"))
 df_uct['dateTimeMeasured'] = pd.to_datetime(df_uct['Name'], format='%y%m%d_%H%M%S', errors='coerce')
 df_uct['dateTimeMeasured_num'] = df_uct["dateTimeMeasured"].astype(np.int64) // 10**9
 df_uct = df_uct.sort_values(by=["dateTimeMeasured"], ascending=True, ignore_index=True)
@@ -79,7 +79,7 @@ df_uct = df_uct[df_uct['AnalyticalID'] != "NBS18-56"]
 df_uct = df_uct[df_uct['AnalyticalID'] != "NBS18-57"]
 
 # Get data - University of Göttingen
-df_ug = pd.read_csv(os.path.join(data_dir, "LT Table S1.csv"))
+df_ug = pd.read_csv(os.path.join(data_dir, "LT_Table_S1.csv"))
 df_ug['SampleName'] = df_ug['SampleName'].str.replace("VsRef", " $CO_2$")
 df_ug['dateTimeMeasured'] = pd.to_datetime(df_ug['dateTimeMeasured'], format='%Y-%m-%d %H:%M:%S')
 df_ug = df_ug.sort_values(by=["dateTimeMeasured"], ascending=True, ignore_index=True)
@@ -289,7 +289,7 @@ axes[4].legend(loc='lower right')
 axes[-1].set_xlabel('Measurement date')
 axes[-1].xaxis.set_major_formatter(mdates.DateFormatter('%b\n%Y'))
 plt.tight_layout()
-plt.savefig(os.path.join(figures_dir, "LT Figure 7.png"))
+plt.savefig(os.path.join(figures_dir, "LT_Figure_7.png"))
 plt.close("all")
 
 
@@ -432,7 +432,7 @@ axes[-1].set_xlabel('Measurement date')
 axes[-1].xaxis.set_major_formatter(mdates.DateFormatter('%b\n%Y'))
 
 plt.tight_layout()
-plt.savefig(os.path.join(figures_dir, "LT Figure 9.png"))
+plt.savefig(os.path.join(figures_dir, "LT_Figure_9.png"))
 plt.close("all")
 
 
@@ -525,5 +525,5 @@ axes[1].set_xlabel("R²")
 axes[1].tick_params(axis="y", length=0) 
         
 plt.tight_layout()
-plt.savefig(os.path.join(figures_dir, "LT Figure 8.png"))
+plt.savefig(os.path.join(figures_dir, "LT_Figure_8.png"))
 plt.close("all")

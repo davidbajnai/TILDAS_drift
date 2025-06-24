@@ -2,12 +2,12 @@
 This script compares the stability of the lab setups at the University of Göttingen and the University of Cape Town.
 
 INPUT:
-- LT Table S1.csv: Contains data from the University of Göttingen.
-- LT Table S2.csv: Contains data from the University of Cape Town.
+- LT_Table_S1.csv: Contains data from the University of Göttingen.
+- LT_Table_S2.csv: Contains data from the University of Cape Town.
 
 OUTPUT:
-- LT Figure 2.png
-- LT Figure 6.png
+- LT_Figure_2.png
+- LT_Figure_6.png
 """
 
 # Import libraries
@@ -40,7 +40,7 @@ plt.rcParams['mathtext.default'] = 'regular'
 plt.rcParams['legend.loc'] = 'lower right'
 
 # Get data - University of Cape Town
-df_uct = pd.read_csv(os.path.join(data_dir, "LT Table S2.csv"))
+df_uct = pd.read_csv(os.path.join(data_dir, "LT_Table_S2.csv"))
 df_uct['dateTimeMeasured'] = pd.to_datetime(df_uct['Name'], format='%y%m%d_%H%M%S', errors='coerce')
 df_uct = df_uct.sort_values(by=["dateTimeMeasured"], ascending=True, ignore_index=True)
 
@@ -70,7 +70,7 @@ df_uct = df_uct[df_uct['AnalyticalID'] != "NBS18-56"]
 df_uct = df_uct[df_uct['AnalyticalID'] != "NBS18-57"]
 
 # Get data - University of Göttingen
-df_ug = pd.read_csv(os.path.join(data_dir, "LT Table S1.csv"))
+df_ug = pd.read_csv(os.path.join(data_dir, "LT_Table_S1.csv"))
 df_ug['SampleName'] = df_ug['SampleName'].str.replace("VsRef", " $CO_2$")
 df_ug['dateTimeMeasured'] = pd.to_datetime(df_ug['dateTimeMeasured'], format='%Y-%m-%d %H:%M:%S')
 df_ug = df_ug.sort_values(by=["dateTimeMeasured"], ascending=True, ignore_index=True)
@@ -277,7 +277,7 @@ axes[0].set_title("University of Göttingen")
 axes[1].set_title("University of Cape Town")
 
 plt.tight_layout()
-plt.savefig(os.path.join(figures_dir, "LT Figure 6.png"))
+plt.savefig(os.path.join(figures_dir, "LT_Figure_6.png"))
 plt.close("all")
 
 
@@ -313,5 +313,5 @@ axes[0].set_title("University of Göttingen")
 axes[1].set_title("University of Cape Town")
 
 plt.tight_layout()
-plt.savefig(os.path.join(figures_dir, "LT Figure 2.png"))
+plt.savefig(os.path.join(figures_dir, "LT_Figure_2.png"))
 plt.close("all")

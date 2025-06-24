@@ -8,7 +8,7 @@ INPUT:
         If not present, the script will attempt to fetch them.
 
 OUTPUT:
-- LT Figure 1.png: A plot showing the absorption coefficients from HITRAN and the experimental data.
+- LT_Figure_1.png: A plot showing the absorption coefficients from HITRAN and the experimental data.
 '''
 
 # Import libraries
@@ -220,5 +220,5 @@ axes[1].set_xlabel('Wavenumber (cm$^{-1}$)')
 axes[1].set_ylabel('Signal (mV)')
 
 plt.tight_layout()
-plt.savefig(os.path.join(figures_dir, "LT Figure 1.png"))
+plt.savefig(os.path.join(figures_dir, "LT_Figure_1.png"))
 plt.close("all")

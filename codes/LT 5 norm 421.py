@@ -2,10 +2,10 @@
 This script shows the effect of scale offset correction on the Cape Town data.
 
 INPUT:
-- LT Table S2.csv: A CSV file containing data from the University of Cape Town.
+- LT_Table_S2.csv: A CSV file containing data from the University of Cape Town.
 
 OUTPUT:
-- LT Figure 4.png: A plot showing the Dp17O values before and after scale offset correction.
+- LT_Figure_4.png: A plot showing the Dp17O values before and after scale offset correction.
 """
 
 
@@ -42,7 +42,7 @@ c_NBS18, c_IAEA603 = "#F75056", "#4D0820"
 c_light, c_heavy = "#309FD1", "#0C3992"
 
 # Get data - University of Cape Town
-df_uct = pd.read_csv(os.path.join(data_dir, "LT Table S2.csv"))
+df_uct = pd.read_csv(os.path.join(data_dir, "LT_Table_S2.csv"))
 df_uct['dateTimeMeasured'] = pd.to_datetime(df_uct['Name'], format='%y%m%d_%H%M%S', errors='coerce')
 df_uct['dateTimeMeasured_num'] = df_uct["dateTimeMeasured"].astype(np.int64) // 10**9
 df_uct = df_uct.sort_values(by=["dateTimeMeasured"], ascending=True, ignore_index=True)
@@ -73,7 +73,7 @@ df_uct = df_uct[df_uct['AnalyticalID'] != "NBS18-56"]
 df_uct = df_uct[df_uct['AnalyticalID'] != "NBS18-57"]
 
 # Get data - University of Göttingen
-df_ug = pd.read_csv(os.path.join(data_dir, "LT Table S1.csv"))
+df_ug = pd.read_csv(os.path.join(data_dir, "LT_Table_S1.csv"))
 df_ug['SampleName'] = df_ug['SampleName'].str.replace("VsRef", " $CO_2$")
 df_ug['dateTimeMeasured'] = pd.to_datetime(df_ug['dateTimeMeasured'], format='%Y-%m-%d %H:%M:%S')
 df_ug = df_ug.sort_values(by=["dateTimeMeasured"], ascending=True, ignore_index=True)
@@ -207,7 +207,7 @@ def plot_data(df, lab_ref1, c_ref1, lab_ref2, c_ref2, fig_num):
     axes[-1].set_xlabel('Measurement date')
     axes[-1].xaxis.set_major_formatter(mdates.DateFormatter('%b\n%Y'))
     plt.tight_layout()
-    plt.savefig(os.path.join(figures_dir, f"LT Figure {fig_num}.png"))
+    plt.savefig(os.path.join(figures_dir, f"LT_Figure_{fig_num}.png"))
     plt.close("all")
 
 

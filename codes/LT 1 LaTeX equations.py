@@ -51,7 +51,7 @@ for i, eq in enumerate(equations, 1):
     url = f"https://latex.codecogs.com/png.image?{encoded}"
     response = requests.get(url)
     if response.status_code == 200:
-        output_file = os.path.join(figures_dir, f"LT Equation {i}.png")
+        output_file = os.path.join(figures_dir, f"LT_Equation_{i}.png")
         with open(output_file, "wb") as f:
             f.write(response.content)
 

@@ -6,7 +6,7 @@ INPUT:
 - 220313_094743.stc: A STC file containing analytical conditions data.
 
 OUTPUT:
-- LT Figure 5.png: A plot showing the isotopic data and analytical conditions over time.
+- LT_Figure_5.png: A plot showing the isotopic data and analytical conditions over time.
 """
 
 # Import libraries
@@ -103,5 +103,5 @@ axes[-1].xaxis.set_major_locator(MultipleLocator(1))
 axes[-1].set_xlabel("Measurement time (h)")
 
 plt.tight_layout()
-plt.savefig(os.path.join(figures_dir, "LT Figure 5.png"))
+plt.savefig(os.path.join(figures_dir, "LT_Figure_5.png"))
 plt.close("all")
