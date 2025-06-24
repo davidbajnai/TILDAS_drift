@@ -7,27 +7,27 @@ This paper is currently being prepared for submission. A preprint will be availa
 ## List of Supplementary Data
 
 - **Table S1**
-  Long-term replicate-level measurement data from University of Göttingen
+  Long-term replicate-level measurement data from University of Göttingen.  
   *Used in*: [Figure 2](figures/LT_Figure_2.png), [Figure 6](figures/LT_Figure_6.png), [Figure 7](figures/LT_Figure_7.png)
 
 - **Table S2**
-  Long-term replicate-level measurement data from University of Cape Town. Note that this table includes replicate measurements deemed inaccurate due to potential hardware malfunctions; these replicates are listed in the Python code and are excluded from the figures.
+  Long-term replicate-level measurement data from University of Cape Town. Note that this table includes replicate measurements deemed inaccurate due to potential hardware malfunctions; these replicates are listed in the Python code and are excluded from the figures.  
   *Used in*: [Figure 2](figures/LT_Figure_2.png), [Figure 4](figures/LT_Figure_4.png), [Figure 6](figures/LT_Figure_6.png), [Figure 9](figures/LT_Figure_9.png).
 
 - **Table S3**
-  Replicate-level measurement data for the concentration experiments from University of Cape Town
+  Replicate-level measurement data for the concentration experiments from University of Cape Town.  
   *Used in*: [Figure 3](figures/LT_Figure_3.png)
 
 - **Table S4**  
-  Replicate-level measurement data for the concentration experiments from University of Göttingen
+  Replicate-level measurement data for the concentration experiments from University of Göttingen.  
   *Used in*: [Figure 3](figures/LT_Figure_3.png)
 
 - **220313_094743.str** and **220313_094743.stc**
-  A pair pf spectroscopic data files that record the mixing ratios (`.str`) and various analytical parameters (`.stc`). Measurements were made at the University of Göttingen. Note that the same data was also used in [Bajnai et al. (2023)](https://github.com/davidbajnai/TARDIS).
+  A pair pf spectroscopic data files that record the mixing ratios (`.str`) and various analytical parameters (`.stc`). Measurements were made at the University of Göttingen. Note that the same data was also used in [Bajnai et al. (2023)](https://github.com/davidbajnai/TARDIS).  
   *Used in*: [Figure 5](figures/LT_Figure_5.png)
 
 - **250521_003216_001_SIG.csv**
-  Spectral file from University of Göttingen (retrieved from the correspondingly named `.spb` file using Igor Pro 6 and the Aerodyne Research Inc.-supplied macros)
+  Spectral file from University of Göttingen (retrieved from the correspondingly named `.spb` file using Igor Pro 6 and the Aerodyne Research Inc.-supplied macros).  
   *Used in*: [Figure 1](figures/LT_Figure_1.png)
 
 ## License
