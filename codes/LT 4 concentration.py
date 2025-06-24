@@ -47,7 +47,7 @@ df_uct = pd.read_csv(os.path.join(data_dir, "LT_Table_S3.csv"))
 df_uct['pCO2Mismatch'] = df_uct['Xp626_L2_mean']/1000 - 421
 df_uct['pCO2Mismatch_error'] = df_uct['Xp626_L2_std']/1000
 df_uct["Dp17O"] = df_uct['Dp17O_raw_mean']*1000
-df_uct["Dp17OError"] = df_uct['Dp17O_raw_std']*1000
+df_uct["Dp17OError"] = (df_uct['Dp17O_raw_std']*1000)/ np.sqrt(df_uct['NumCycles'])
 df_uct_zero_2025 = df_uct[df_uct['SampleName'].str.contains("ZERO") & (df_uct['Session'] == 2025)].copy()
 df_uct_603_2024 = df_uct[df_uct['SampleName'].str.contains("603") & (df_uct['Session'] == 2024)].copy()
 df_uct_603_2025 = df_uct[df_uct['SampleName'].str.contains("603") & (df_uct['Session'] == 2025)].copy()
