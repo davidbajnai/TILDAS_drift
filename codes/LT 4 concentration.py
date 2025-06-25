@@ -86,15 +86,6 @@ datasets = [
      df_uct_603_2024['pCO2Mismatch_error'], df_uct_603_2024['Dp17OError']),
 ]
 
-# for x, y, color, label in datasets:
-#     slope, intercept, r_value, p_value, std_err = linregress(x, y)
-#     x_line = np.linspace(x.min(), x.max(), 100)
-#     ax.plot(x_line, slope * x_line + intercept, color=color, linestyle="-")
-#     marker = 'v' if '2024' in label and 'IAEA' in label else 'o'
-#     ax.scatter(x, y,
-#                ec=color, fc=f"{color}80", marker=marker,
-#                label=f"{label}\n$\it{{m}}$ = {slope:.1f}$\pm${std_err:.1f}  $\it{{N}}$ = {len(x)}")
-
 for x, y, color, label, xerr, yerr in datasets:
     slope, intercept, r_value, p_value, std_err = linregress(x, y)
     x_line = np.linspace(x.min(), x.max(), 100)
@@ -106,13 +97,13 @@ for x, y, color, label, xerr, yerr in datasets:
                ec=color, fc=f"{color}80", marker=marker,
                label=f"{label}\n$\it{{m}}$ = {slope:.1f}$\pm${std_err:.1f}  $\it{{N}}$ = {len(x)}")
 
-    ax.errorbar(
-        x, y,
-        xerr=xerr, yerr=yerr,
-        fmt="none",
-        ecolor=f"{color}80",
-        elinewidth=0.8,
-    )
+    # ax.errorbar(
+    #     x, y,
+    #     xerr=xerr, yerr=yerr,
+    #     fmt="none",
+    #     ecolor=f"{color}80",
+    #     elinewidth=0.8,
+    # )
 
 
 ax.legend(loc="upper left", bbox_to_anchor=(1, 1.02))
