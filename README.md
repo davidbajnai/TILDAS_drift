@@ -1,5 +1,5 @@
 # Supplementary material for:</br>Sensitivity of tunable infrared laser spectroscopic measurements of ∆’<sup>17</sup>O in CO<sub>2</sub> to analytical conditions
-<!-- [![DOI](https://zenodo.org/badge/xxxx.svg)](https://zenodo.org/doi/10.5281/zenodo.xxxx) -->
+[![DOI](https://zenodo.org/badge/996752605.svg)](https://doi.org/10.5281/zenodo.15742110)
 
 ## Reference
 This paper is currently being prepared for submission. A preprint will be available soon.
