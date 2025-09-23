@@ -2,7 +2,8 @@
 [![DOI](https://zenodo.org/badge/996752605.svg)](https://doi.org/10.5281/zenodo.15742110)
 
 ## Reference
-This paper is currently being prepared for submission. A preprint will be available soon.
+>[!IMPORTANT]
+>A preprint version of the corresponding manuscript is available at [EGUSphere](https://egusphere.copernicus.org/preprints/2025/egusphere-2025-3040/).
 
 ## List of Supplementary Data
 
