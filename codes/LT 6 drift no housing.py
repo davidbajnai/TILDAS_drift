@@ -2,11 +2,11 @@
 This script plots analytical conditions and isotopic data from a pair of STR and STC files.
 
 INPUT:
-- 220313_094743.str: A STR file containing isotopic data.
-- 220313_094743.stc: A STC file containing analytical conditions data.
+- 220313_094743.str: A STR file containing isotope data.
+- 220313_094743.stc: A STC file containing data on the analytical conditions.
 
 OUTPUT:
-- LT_Figure_5.png: A plot showing the isotopic data and analytical conditions over time.
+- LT_Figure_5.png: Time series of isotopologue concentrations and temperature over time.
 """
 
 # Import libraries
@@ -27,7 +27,7 @@ figures_dir = os.path.join(script_dir, '../figures')
 
 # Plot parameters
 plt.rcParams.update({"font.size": 8})
-plt.rcParams["figure.figsize"] = (5, 6)
+plt.rcParams["figure.figsize"] = (6, 6)
 plt.rcParams["patch.linewidth"] = 1
 plt.rcParams['lines.linewidth'] = 1
 plt.rcParams["savefig.dpi"] = 300
@@ -35,6 +35,8 @@ plt.rcParams["savefig.bbox"] = "tight"
 plt.rcParams['savefig.transparent'] = False
 plt.rcParams['mathtext.default'] = 'regular'
 plt.rcParams['legend.loc'] = 'lower right'
+plt.rcParams['legend.framealpha'] = 0.9
+
 
 # Import data
 filename = "220313_094743"
@@ -58,6 +60,14 @@ df["d18O"] = ((df["628"]/df["626"])-1) * 1000
 df["d17O"] = ((df["627"]/df["626"])-1) * 1000
 df["Dp17O"] = Dp17O(df["d17O"], df["d18O"])
 
+# Print information about the data
+# The coolant temperature varies between
+print(f"Coolant temperature varies between {df['Tref'].min():.1f} K and {df['Tref'].max():.1f} K, i.e. within {df['Tref'].max() - df['Tref'].min():.2g} K.")
+# The cell temperature varies between
+print(f"Cell temperature varies between {df['Traw'].min():.1f} K and {df['Traw'].max():.1f} K, i.e. within {df['Traw'].max() - df['Traw'].min():.2g} K.")
+# The electronics temperature varies between
+print(f"Electronics temperature varies between {df['AD6'].min():.1f} K and {df['AD6'].max():.1f} K, i.e. within {df['AD6'].max() - df['AD6'].min():.3g} K.")
+
 fig, axes = plt.subplots(4, 1, sharex=True)
 axes = axes.flatten()
 
@@ -68,14 +78,18 @@ for ax in fig.get_axes():
             bbox=dict(fc="w", pad=0.1, ec="none", alpha=0.8),
             transform=ax.transAxes)
 
-# Cell temperature
-axes[0].plot(df.index, devmean(df["Traw"]), c="#1455C0")
+# Temperature
+axes[0].plot(df.index, devmean(df["Traw"]*50), c="#1455C0", label="cell $\mathit{T}$ (x50)") # Cell temperature
+axes[0].plot(df.index, devmean(df["Tref"]*50), c="#F75056", label="coolant $\mathit{T}$ (x50)") # Coolant temperature
+axes[0].plot(df.index, devmean(df["AD6"]), c="k", label="electronics $\mathit{T}$") # Electronics temperature
+
+axes[0].legend()
 axes[0].set_ylabel(r'$\mathit{T}$ (K)')
 
 
 # Concentration
 y_628 = devmean(mole_fraction_to_concentration(df["628"]/10**9, df["Traw"], torr_to_pascal(df["Praw"]), 628))*10**8
-axes[1].plot(df.index, y_628, c="#814997", label="'628' (x10$^2$)")
+axes[1].plot(df.index, y_628, c="k", label="'628' (x10$^2$)")
 
 y_626 = devmean(mole_fraction_to_concentration(df["626"]/10**9, df["Traw"], torr_to_pascal(df["Praw"]), 626))*10**6
 axes[1].plot(df.index, y_626, c="#F75056", label="'626'")
@@ -88,7 +102,7 @@ axes[1].set_ylabel("$\mathit{C}$ (µmol m$^{-3}$)")
 
 
 # Delta values
-axes[2].plot(df.index, devmean(df["d18O"]), c="#814997", label="$\delta^{18}O$")
+axes[2].plot(df.index, devmean(df["d18O"]), c="#F75056", label="$\delta^{18}O$")
 axes[2].plot(df.index, devmean(df["d17O"]), c="#1455C0", label="$\delta^{17}O$")
 
 axes[2].legend()

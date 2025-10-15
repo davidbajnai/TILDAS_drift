@@ -183,8 +183,8 @@ axes[0].legend(by_label.values(), by_label.keys())
 
 
 axes[0].plot(x626, y626, color='k', lw=1, label='"626" ($^{16}O^{12}C^{16}O$)')
-axes[0].plot(x628, y628, color='r', lw=1, label='"628" ($^{16}O^{12}C^{18}O$)')
 axes[0].plot(x627, y627, color='g', lw=1, label='"627" ($^{16}O^{12}C^{17}O$)')
+axes[0].plot(x628, y628, color='r', lw=1, label='"628" ($^{16}O^{12}C^{18}O$)')
 
 # axes[0].plot(x1, y1, color='b', lw=1, label='"H2O 1" ($^{16}O^{16}O^{16}O$)')
 # axes[0].plot(x2, y2, color='m', lw=1, label='"H2O 2" ($^{16}O^{16}O^{18}O$)')
@@ -208,12 +208,12 @@ axes[0].xaxis.set_major_locator(ticker.MultipleLocator(0.1))
 
 
 axes[1].scatter(data['wb1_frequency'], data['wb1_spectrum'],
-                marker="o", s=10, c="#63A615", label='measurement')
+                marker="o", s=10, c="#1455C0", label='measurement')
 axes[1].plot(data['wb1_frequency'], data['wb1_wintel_fit'],
-             c="#1455C0", label='spectral fit')
+             c="k", label='spectral fit')
 axes[1].plot(data['wb1_frequency'], data['wb1_wintel_base'],
-             ls="-", c="#F39200", label='baseline')
-
+             ls="--", c="k", label='baseline')
+# F39200
 axes[1].legend()
 axes[1].set_ylim(-260, 10)
 axes[1].set_xlabel('Wavenumber (cm$^{-1}$)')
