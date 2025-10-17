@@ -1,5 +1,5 @@
 """
-This script visualises the relationship between the pCO2 mismatch and the Dp17O values.
+This script visualises the relationship between the chi_626 mismatch and the Dp17O values.
 
 INPUT:
 - LT_Table_S3.csv: A CSV file containing data from the University of Cape Town.
@@ -203,112 +203,40 @@ plt.savefig(os.path.join(figures_dir, "LT_Figure_3.png"))
 plt.close("all")
 
 
-#  The following lines generate a plot d18O vs. X626 mismatch
+#  The following lines calculate the X626 mismatch dependence of d18O
+dataset = [
+    (df_ug_light_2023['pCO2Mismatch'], df_ug_light_2023['d18O'],
+     "light CO$_{2}$"),
 
-# dataset = [
-#     (df_ug_light_2023['pCO2Mismatch'], df_ug_light_2023['d18O'],
-#      df_ug_light_2023['pCO2Mismatch_error'], df_ug_light_2023['d18OError'],
-#      c_light, "-", "light CO$_{2}$"),
+    (df_ug_heavy_2023['pCO2Mismatch'], df_ug_heavy_2023['d18O'],
+     "heavy CO$_{2}$"),
 
-#     (df_ug_heavy_2023['pCO2Mismatch'], df_ug_heavy_2023['d18O'],
-#      df_ug_heavy_2023['pCO2Mismatch_error'], df_ug_heavy_2023['d18OError'],
-#      c_heavy, "-", "heavy CO$_{2}$"),
+    (df_ug_light_2025['pCO2Mismatch'], df_ug_light_2025['d18O'],
+     "light CO$_{2}$"),
 
-#     (df_ug_light_2025['pCO2Mismatch'], df_ug_light_2025['d18O'],
-#      df_ug_light_2025['pCO2Mismatch_error'], df_ug_light_2025['d18OError'],
-#      c_light, "--", "light CO$_{2}$"),
+    (df_ug_heavy_2025['pCO2Mismatch'], df_ug_heavy_2025['d18O'],
+     "heavy CO$_{2}$"),
 
-#     (df_ug_heavy_2025['pCO2Mismatch'], df_ug_heavy_2025['d18O'],
-#      df_ug_heavy_2025['pCO2Mismatch_error'], df_ug_heavy_2025['d18OError'],
-#      c_heavy, "--", "heavy CO$_{2}$"),
+    (df_uct_603_2024['pCO2Mismatch'], df_uct_603_2024['d18O'],
+     "IAEA-603"),
 
-#     (df_uct_603_2024['pCO2Mismatch'], df_uct_603_2024['d18O'],
-#      df_uct_603_2024['pCO2Mismatch_error'], df_uct_603_2024['d18OError'],
-#      c_IAEA603, ":", "IAEA-603"),
+    (df_uct_603_2025['pCO2Mismatch'], df_uct_603_2025['d18O'],
+     "IAEA-603"),
 
-#     (df_uct_603_2025['pCO2Mismatch'], df_uct_603_2025['d18O'],
-#      df_uct_603_2025['pCO2Mismatch_error'], df_uct_603_2025['d18OError'],
-#      c_IAEA603, "-", "IAEA-603"),
+    (df_uct_zero_2025['pCO2Mismatch'], df_uct_zero_2025['d18O'],
+     "zero-enrichment"),
+]
 
-#     (df_uct_zero_2025['pCO2Mismatch'], df_uct_zero_2025['d18O'],
-#      df_uct_zero_2025['pCO2Mismatch_error'], df_uct_zero_2025['d18OError'],
-#      c_zero, "-", "zero-enrichment"),
-# ]
-
-
-# fig, ax = plt.subplots()
-
-# def plot_dataset(ax, dataset):
-#     for x, y, xerr, yerr, color, ls, label in dataset:
-#         slope, intercept, r_value, p_value, std_err = linregress(x, y)
-#         x_line = np.linspace(x.min(), x.max(), 100)
-        
-#         ax.plot(x_line, slope * x_line + intercept,
-#                 color=color, ls=ls, lw=2, zorder=-1,
-#                 label=f"{label}\n$\it{{m}}$ = {slope:.1fg}$\pm${std_err:.1g}, $\it{{N}}$={len(x)}")
-
-
-#         # Uncomment the following lines to plot the data points with error bars:
-
-#         # ax.scatter(x, y,
-#         #            ec=color, fc=f"{color}80", marker="o")
-#         # ax.errorbar(
-#         #     x, y,
-#         #     xerr=xerr, yerr=yerr,
-#         #     fmt="none",
-#         #     ecolor=f"{color}80",
-#         #     elinewidth=0.8,
-#         # )
-
-#         ax.legend(
-#             loc="upper left",
-#             bbox_to_anchor=(1, 1.02),
-#             fontsize=7,
-#             markerscale=0.9
-#         )
-
-
-# plot_dataset(ax, dataset)
-
-# handles, labels = ax.get_legend_handles_labels()
-
-# # Create dummy heading handles
-# from matplotlib.lines import Line2D
-# heading1 = Line2D([], [], color='none', label=r'$\bf{Göttingen\ 2023}$')
-# heading2 = Line2D([], [], color='none', label=r'$\bf{Göttingen\ 2025}$')
-# heading3 = Line2D([], [], color='none', label=r'$\bf{Cape\ Town\ 2023}$')
-# heading4 = Line2D([], [], color='none', label=r'$\bf{Cape\ Town\ 2024}$')
-
-# # Insert headings at desired positions
-# new_handles = []
-# new_labels = []
-
-# for idx, (h, l) in enumerate(zip(handles, labels)):
-#     if idx == 0:
-#         new_handles.append(heading1)
-#         new_labels.append(heading1.get_label())
-#     if idx == 2:
-#         new_handles.append(heading2)
-#         new_labels.append(heading2.get_label())
-#     if idx == 4:
-#         new_handles.append(heading3)
-#         new_labels.append(heading3.get_label())
-#     if idx == 5:
-#         new_handles.append(heading4)
-#         new_labels.append(heading4.get_label())
+for x, y, label in dataset:
+    xy = pd.concat([x, y], axis=1).dropna()
+    if xy.empty or len(xy) < 2:
+        print(f"{label}: not enough valid points for regression")
     
-#     new_handles.append(h)
-#     new_labels.append(l)
+    xvals = xy.iloc[:, 0].to_numpy()
+    yvals = xy.iloc[:, 1].to_numpy()
+    mask = np.isfinite(xvals) & np.isfinite(yvals)
+    if mask.sum() < 2:
+        print(f"{label}: not enough finite points for regression")
 
-# # Redraw the legend
-# ax.legend(new_handles, new_labels,
-#           loc="upper left",
-#           bbox_to_anchor=(1, 1.02),
-#           fontsize=7,
-#           markerscale=0.9)
-
-# ax.set_xlabel(r"$\chi\prime^{smp}_{626} - \chi\prime^{std}_{626} $ ($\mu$mol mol$^{-1}$)")
-# ax.set_ylabel(r"$\delta^{18}O_{smp/std}$ (ppm)")
-
-# plt.savefig(os.path.join(figures_dir, "LT_Figure_3b.png"))
-# plt.close("all")
+    slope, intercept, r_value, p_value, std_err = linregress(xvals[mask], yvals[mask])
+    print(f"{label}: slope {slope:.3f} ± {std_err:.3f} per umol mol-1")

@@ -18,9 +18,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-import pandas as pd
-import matplotlib.pyplot as plt
 from itertools import combinations
+import statsmodels.api as sm
 from statsmodels.api import OLS, add_constant
 from functions import *
 
@@ -97,14 +96,82 @@ df_ug['cell_pressure_error'] = df_ug['PCellRef_error']*133.322
 df_ug['chi_p_626'] = df_ug['pCO2Ref']
 df_ug['chi_p_626_error'] = df_ug['pCO2Ref_error']
 
-# Rolling standard deviation over a 7-day window (centered)
-df_ug.index = pd.to_datetime(df_ug.index)
-rolling_scatter = df_ug["chi_p_626"].rolling("7D").std()
-rolling_scatter = rolling_scatter.dropna()
-print(f"Average change in pCO2 between measurements at the University of Göttingen: {rolling_scatter.mean():.0f} ppm")
+
+
+# Function to apply LOESS smoothing 
+def apply_loess(df, column_to_fit, common_x, filter_for_sample_name=None):
+    """
+    Applies LOESS smoothing to a specified column in a DataFrame.
+
+    Parameters:
+        df (pd.DataFrame): Input DataFrame containing the data.
+        column_to_fit (str): The name of the column to apply LOESS smoothing on.
+        common_x (array-like): The common x-values for interpolation.
+        filter_for_sample_name (str, optional): Filter condition for 'SampleName' column.
+
+    Returns:
+        dict: A dictionary containing the smoothed values.
+    """
+
+    # Apply filter if provided
+    if filter_for_sample_name:
+        df = df[df['SampleName'].str.contains(filter_for_sample_name, regex=False)]
+
+    # Check if the column exists in the DataFrame
+    if column_to_fit not in df.columns:
+        raise ValueError(f"Column '{column_to_fit}' not found in the DataFrame.")
+
+    # Apply LOESS smoothing on the specified column
+    loess_fit = sm.nonparametric.lowess(
+        df[column_to_fit], df["dateTimeMeasured_num"], frac=0.3
+    )
+
+    # Interpolation for smoother plotting and matching data lengths
+    loess_fit_interp = np.interp(common_x, loess_fit[:, 0], loess_fit[:, 1])
+
+    # Return the results
+    return {"loess_fit": loess_fit_interp}
+
+
 
 # Function to apply LOESS smoothing
 def loess_on_columns(df, lab_ref1, lab_ref2):
+    """
+    Apply LOESS smoothing to isotope and instrument data for two reference materials.
+
+    This function filters the input DataFrame for two specified reference materials,
+    applies LOESS smoothing to selected columns, and computes the scale compression
+    (Dp17O_ref1 - Dp17O_ref2) of the instrument.
+
+    Parameters
+    df : pandas.DataFrame
+        Input dataset containing isotope and instrument data, including columns such as
+        'SampleName', 'dateTimeMeasured_num', 'Dp17O', 'd18O', 'd17O',
+        'cell_pressure', 'cell_temperature', 'electronics_temperature', and 'chi_p_626'.
+
+    lab_ref1 : str
+        Label of reference material #1 (used for filtering and LOESS fitting).
+
+    lab_ref2 : str
+        Label of reference material #2 (used for filtering and LOESS fitting).
+
+    Returns
+    df_fit : pandas.DataFrame
+        DataFrame containing the LOESS fits for the selected parameters and the derived
+        scale compression values between the two references.
+
+    df_ref1 : pandas.DataFrame
+        Subset of the original DataFrame filtered for reference material #1.
+
+    df_ref2 : pandas.DataFrame
+        Subset of the original DataFrame filtered for reference material #2.
+
+    lab_ref1 : str
+        Label of reference material #1.
+
+    lab_ref2 : str
+        Label of reference material #2.
+    """
 
     df = df[df['SampleName'].str.contains(lab_ref1, regex=False) | df['SampleName'].str.contains(lab_ref2, regex=False)]
     common_x = np.linspace(df["dateTimeMeasured_num"].min(), df["dateTimeMeasured_num"].max(), 10000)
@@ -125,18 +192,18 @@ def loess_on_columns(df, lab_ref1, lab_ref2):
 
     df_fit["Dp17O_compression"] = (df_fit["Dp17O_ref1"] - df_fit["Dp17O_ref2"])
 
-    df_ug_ref1 = df[df['SampleName'].str.contains(lab_ref1, regex=False)]
+    df_ref1 = df[df['SampleName'].str.contains(lab_ref1, regex=False)]
     df_ref2 = df[df['SampleName'].str.contains(lab_ref2, regex=False)]
-
-    return df_fit, df_ug_ref1, df_ref2, lab_ref1, lab_ref2
+    
+    return df_fit, df_ref1, df_ref2, lab_ref1, lab_ref2
 
 
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # Figure 7 - University of Göttingen
-
 # Apply LOESS smoothing for University of Göttingen data
-df_ug_fit, df_ug_ref1, df_ug_ref2, lab_ref1_ug, lab_ref2_ug = loess_on_columns(df_ug, "light $CO_2$", "heavy $CO_2$")
+df_ug_fit, df_ug_ref1, df_ug_ref2, lab_ref1_ug, lab_ref2_ug = loess_on_columns(
+    df_ug, "light $CO_2$", "heavy $CO_2$")
 
 fig, axes = plt.subplots(6, 1, sharex=True, figsize=(6, 8.5))
 axes = axes.flatten()
@@ -147,7 +214,7 @@ for ax in fig.get_axes():
             size=12, weight="bold", ha="left", va="top",
             transform=ax.transAxes)
 
-# Subplot -  ∆'17O data
+# Subplot A: ∆'17O data
 axes[0].errorbar(df_ug_ref1['dateTimeMeasured'],
                  (df_ug_ref1['Dp17O']),
                  yerr=df_ug_ref1['Dp17O_error'],
@@ -177,7 +244,7 @@ axes[0].legend(loc="upper right")
 
 axes[0].set_ylabel("$\Delta\prime^{17}O^{smp/wg}_{meas}$ (ppm)")
 
-# Subplot – 626 mixing ratio
+# Subplot B: 626 mixing ratio
 axes[1].errorbar(df_ug_ref1['dateTimeMeasured'],
                  df_ug_ref1['chi_p_626'],
                  yerr=df_ug_ref1['chi_p_626_error'],
@@ -279,7 +346,7 @@ axes[4].plot(pd.to_datetime(df_ug_fit['common_x'], unit='s'), df_ug_fit['electro
 axes[4].set_ylabel(r'$\mathit{T}_{elec}$ (K)')
 
 
-# Subplot - Compression in ∆17O
+# Subplot F: Scale compression
 def format_text(text):
     return text.replace("$", "").replace(" ", r"\ ")
 lab_ref1 = format_text(lab_ref1_ug)
@@ -290,9 +357,12 @@ axes[5].plot(pd.to_datetime(df_ug_fit['common_x'], unit='s'),
              '-', c="k", lw=2,
              label=rf"$\Delta\prime^{{17}}O_{{{lab_ref1}}} - \Delta\prime^{{17}}O_{{{lab_ref2}}}$")
 
-axes[5].set_ylabel("Compression (ppm)")
+axes[5].set_ylabel("Scale compression (ppm)")
 
-# Predictor model
+# Perform a multiple linear regression to model Dp17O_compression as a function of
+# cell_temperature, electronics_temperature, cell_pressure, and chi_626.
+# The general equation is:
+# compression_predicted = a + b1 * cell_temperature + b2 * electronics_temperature + b3 * cell_pressure + b4 * chi_p_626
 predictors = ["cell_temperature", "electronics_temperature", "cell_pressure", "chi_p_626"]
 X = add_constant(df_ug_fit[predictors], has_constant="add")
 y = df_ug_fit["Dp17O_compression"]
@@ -318,7 +388,8 @@ plt.close("all")
 # Figure 8 - University of Cape Town
 
 # Apply LOESS smoothing for University of Cape Town data
-df_uct_fit, df_uct_ref1, df_uct_ref2, lab_ref1_uct, lab_ref2_uct = loess_on_columns(df_uct, "NBS18", "IAEA603")
+df_uct_fit, df_uct_ref1, df_uct_ref2, lab_ref1_uct, lab_ref2_uct = loess_on_columns(
+    df_uct, "NBS18", "IAEA603")
 
 fig, axes = plt.subplots(5, 1, sharex=True, figsize=(6, 7.5))
 axes = axes.flatten()
@@ -329,7 +400,7 @@ for ax in fig.get_axes():
             size=12, weight="bold", ha="left", va="top",
             transform=ax.transAxes)
 
-# Subplot -  ∆'17O data
+# Subplot A: ∆'17O data
 axes[0].errorbar(df_uct_ref1['dateTimeMeasured'],
                  (df_uct_ref1['Dp17O']),
                  yerr=df_uct_ref1['Dp17O_error'],
@@ -360,7 +431,7 @@ axes[0].legend(loc="upper right")
 axes[0].set_ylabel("$\Delta\prime^{17}O^{smp/wg}_{true}$ (ppm)")
 
 
-# Subplot C: Cell pressure
+# Subplot B: Cell pressure
 axes[1].errorbar(df_uct_ref1['dateTimeMeasured'],
                  df_uct_ref1['cell_pressure'],
                  yerr=df_uct_ref1['cell_pressure_error'],
@@ -385,7 +456,7 @@ axes[1].plot(pd.to_datetime(df_uct_fit['common_x'], unit='s'), df_uct_fit['cell_
 
 axes[1].set_ylabel(r'$\mathit{P}_{cell}$ (Pa)')
 
-# Subplot D: Cell temperature
+# Subplot C: Cell temperature
 axes[2].errorbar(df_uct_ref1['dateTimeMeasured'],
                  df_uct_ref1['cell_temperature'],
                  yerr=df_uct_ref1['cell_temperature_error'],
@@ -410,7 +481,7 @@ axes[2].plot(pd.to_datetime(df_uct_fit['common_x'], unit='s'), df_uct_fit['cell_
 
 axes[2].set_ylabel(r'$\mathit{T}_{cell}$ (K)')
 
-# Subplot E: Electronics temperature
+# Subplot D: Electronics temperature
 axes[3].errorbar(df_uct_ref1['dateTimeMeasured'],
                  df_uct_ref1['electronics_temperature'],
                  yerr=df_uct_ref1['electronics_temperature_error'],
@@ -436,7 +507,7 @@ axes[3].plot(pd.to_datetime(df_uct_fit['common_x'], unit='s'), df_uct_fit['elect
 axes[3].set_ylabel(r'$\mathit{T}_{elec}$ (K)')
 
 
-# Subplot F: Scale compression in ∆17O
+# Subplot E: Scale compression
 def format_text(text):
     return text.replace("$", "").replace(" ", r"\ ")
 lab_ref1 = format_text(lab_ref1_uct)
@@ -447,9 +518,12 @@ axes[4].plot(pd.to_datetime(df_uct_fit['common_x'], unit='s'),
              '-', c="k", lw=2,
              label=rf"$\Delta\prime^{{17}}O_{{{lab_ref1}}} - \Delta\prime^{{17}}O_{{{lab_ref2}}}$")
 
-axes[4].set_ylabel("Compression (ppm)")
+axes[4].set_ylabel("Scale compression (ppm)")
 
-# Predictor model
+# Perform a multiple linear regression to model Dp17O_compression as a function of
+# cell_temperature, electronics_temperature, and cell_pressure.
+# The general equation is:
+# compression_predicted = a + b1 * cell_temperature + b2 * electronics_temperature + b3 * cell_pressure
 predictors = ["cell_temperature", "electronics_temperature", "cell_pressure"]
 X = add_constant(df_uct_fit[predictors], has_constant="add")
 y = df_uct_fit["Dp17O_compression"]
@@ -521,7 +595,7 @@ uct_df = pd.DataFrame(uct_mlr_results, columns=["Predictors", "R2", "pval"])
 uct_df = ug_df[["Predictors"]].merge(uct_df, on="Predictors", how="left")
 
 # Plot
-fig, axes = plt.subplots(1, 2, figsize=(7.8, 3.5), sharex = True, sharey = True)
+fig, axes = plt.subplots(1, 2, figsize=(7.8, 3.5), sharex=True, sharey=True)
 axes = axes.flatten()
 
 for ax in fig.get_axes():
@@ -559,10 +633,9 @@ for bar, r2, pval in zip(bars, ug_df["R2"], ug_df["pval"]):
         print(f"Warning: Predictor combination '{ug_df['Predictors'].iloc[i]}' has p-value {pval:.1g}")
 
 
-
 axes[0].set_title("University of Göttingen")
 axes[0].set_xlabel(r"$R^{2}$")
-axes[0].set_ylabel("Predictor combination")
+# axes[0].set_ylabel("Predictor combination")
 axes[0].set_xlim(0, 1)
 axes[0].tick_params(axis="y", length=0) 
 

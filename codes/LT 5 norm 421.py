@@ -138,7 +138,7 @@ def plot_data(df, lab_ref1, c_ref1, lab_ref2, c_ref2, fig_num):
     axes[1].set_ylim(-420, 420)
 
 
-    # Subplot B: Mixing ratio
+    # Subplot C: Mixing ratio
     axes[2].errorbar(df_ref1['dateTimeMeasured'],
                      df_ref1['chi_p_626'],
                      yerr=df_ref1['chi_p_626_error'],
@@ -172,8 +172,8 @@ def plot_data(df, lab_ref1, c_ref1, lab_ref2, c_ref2, fig_num):
     plt.savefig(os.path.join(figures_dir, f"LT_Figure_{fig_num}.png"))
     plt.close("all")
 
-    print("Comparing the standard deviation of standards before and after scale-offset correction")
-    print(f"{lab_ref1} Dp17O_meas: {df_ref1['Dp17O'].std():.0f} ppm ---> Dp17O_true: {df_ref1['Dp17O_corr'].std():.0f} ppm")
-    print(f"{lab_ref2} Dp17O_meas: {df_ref2['Dp17O'].std():.0f} ppm ---> Dp17O_true: {df_ref2['Dp17O_corr'].std():.0f} ppm")
+    print("Comparing the standard deviation of standards before and after scale-offset correction:")
+    print(f"{lab_ref1} ∆'17O_meas: {df_ref1['Dp17O'].std():.0f} ppm ---> ∆'17O_true: {df_ref1['Dp17O_corr'].std():.0f} ppm")
+    print(f"{lab_ref2} ∆'17O_meas: {df_ref2['Dp17O'].std():.0f} ppm ---> ∆'17O_true: {df_ref2['Dp17O_corr'].std():.0f} ppm")
 
 plot_data(df_uct, "NBS18", c_NBS18, "IAEA603", c_IAEA603, 4)
