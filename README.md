@@ -9,11 +9,11 @@
 
 - **Table S1**
   Long-term replicate-level measurement data from University of Göttingen.  
-  *Used in*: [Figure 2](figures/LT_Figure_2.png), [Figure 6](figures/LT_Figure_6.png), [Figure 7](figures/LT_Figure_7.png)
+  *Used in*: [Figure 2](figures/LT_Figure_2.png), [Figure 6](figures/LT_Figure_6.png), [Figure 7](figures/LT_Figure_7.png), [Figure 9](figures/LT_Figure_9.png)
 
 - **Table S2**
   Long-term replicate-level measurement data from University of Cape Town. Note that this table includes replicate measurements deemed inaccurate due to potential hardware malfunctions; these replicates are listed in the Python code and are excluded from the figures.  
-  *Used in*: [Figure 2](figures/LT_Figure_2.png), [Figure 4](figures/LT_Figure_4.png), [Figure 6](figures/LT_Figure_6.png), [Figure 9](figures/LT_Figure_9.png).
+  *Used in*: [Figure 2](figures/LT_Figure_2.png), [Figure 4](figures/LT_Figure_4.png), [Figure 6](figures/LT_Figure_6.png), [Figure 8](figures/LT_Figure_8.png), [Figure 9](figures/LT_Figure_9.png)
 
 - **Table S3**
   Replicate-level measurement data for the concentration experiments from University of Cape Town.  
