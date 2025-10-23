@@ -60,14 +60,6 @@ df_ug = pd.read_csv(os.path.join(data_dir, "LT_Table_S4.csv"))
 df_ug['SampleName'] = df_ug['SampleName'].str.replace("VsRef", " $CO_2$")
 df_ug['dateTimeMeasured'] = pd.to_datetime(df_ug['dateTimeMeasured'], format='%Y-%m-%d %H:%M:%S')
 
-# Print the start and end of analytical sessions in Göttingen
-# print("Göttingen analytical sessions:")
-# years = df_ug['dateTimeMeasured'].dt.year.unique()
-# for year in years:
-#     earliest = df_ug[df_ug['dateTimeMeasured'].dt.year == year]['dateTimeMeasured'].min()
-#     latest = df_ug[df_ug['dateTimeMeasured'].dt.year == year]['dateTimeMeasured'].max()
-#     print(f"{earliest.date().strftime('%d %B, %Y')} to {latest.date().strftime('%d %B, %Y')}")
-
 # Convert delta-values relative to WG (so a zero enrichment would yield a d18O of 0)
 df_ug["d18O"] = deltaO_vs_WG(df_ug["d18O"], 28.048)
 df_ug["d17O"] = deltaO_vs_WG(df_ug["d17O"], 14.621)

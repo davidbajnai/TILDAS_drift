@@ -96,6 +96,10 @@ df_ug['cell_pressure_error'] = df_ug['PCellRef_error']*133.322
 df_ug['chi_p_626'] = df_ug['pCO2Ref']
 df_ug['chi_p_626_error'] = df_ug['pCO2Ref_error']
 
+# Convert delta-values relative to WG (so a zero enrichment would yield a d18O of 0)
+df_ug["d18O"] = deltaO_vs_WG(df_ug["d18O"], 28.048)
+df_ug["d17O"] = deltaO_vs_WG(df_ug["d17O"], 14.621)
+df_ug["Dp17O"] = Dp17O(df_ug["d17O"], df_ug["d18O"])
 
 
 # Function to apply LOESS smoothing 
