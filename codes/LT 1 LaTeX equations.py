@@ -1,5 +1,6 @@
 """
 This script renders the LaTeX equations for the manuscript as PNG images using the Codecogs API.
+It also converts the LaTeX equations to MathML format that can be used in Word documents.
 """
 
 # Import libraries
@@ -7,6 +8,7 @@ import requests
 import os
 from urllib.parse import quote
 from PIL import Image
+import latex2mathml.converter as l2m
 
 # Get script directory for relative file paths
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -81,6 +83,8 @@ for i, eq in enumerate(equations, 1):
         with Image.open(output_file) as img:
             height_px = img.height
         target_cm = height_px * (0.45 / 55)
-        print(f"Equation {eqn}: set height to {target_cm:.2f} cm")
+        print(f"Equation {eqn}: set image height in Word to {target_cm:.2f} cm")
     else:
         print(f"Failed to render Equation {i}: {response.status_code}")
+    
+    print(l2m.convert(eq) + "\n")
