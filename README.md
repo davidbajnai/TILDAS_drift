@@ -31,5 +31,8 @@
   Spectral file from University of Göttingen (retrieved from the correspondingly named `.spb` file using Igor Pro 6 and the Aerodyne Research Inc.-supplied macros).  
   *Used in*: [Figure 1](figures/LT_Figure_1.png)
 
+- **data processing scripts**
+  A [python](codes/data%20processing%20scripts/evaluateData_UG.py) and a [MATLAB](codes/data%20processing%20scripts/evaluateData_UCT.m) script, which used to process the TILDAS output data (.STC and .STR files).  
+
 ## License
 All files in this repository are available under [CC0 1.0](LICENSE). No rights reserved.
