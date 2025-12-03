@@ -62,7 +62,7 @@ equations = [
     r"\Delta^{\prime17}\mathrm{O^{true}_{smp/wg}} \simeq \Delta^{\prime17}\mathrm{O^{meas}_{smp/wg}}+(1-\lambda_{\mathrm{RL}})b_{626}\Big[\frac{1}{\chi^{\prime\mathrm{smp}}_{626\mathrm{,meas}}}-\frac{1}{\chi^{\prime\mathrm{wg}}_{626\mathrm{,meas}}}\Big]",
 
     # Equation A6
-    r"\Delta^{\prime17}\mathrm{O^{true}_{smp/wg}} \simeq \Delta^{\prime17}\mathrm{O^{meas}_{smp/wg}}-(1-\lambda_{\mathrm{RL}})b_{626}/(\chi^{\prime\mathrm{wg}}_{626\mathrm{,meas}})^2\times(\chi^{\prime\mathrm{smp}}_{626\mathrm{,meas}}-\chi^{\prime\mathrm{wg}}_{626\mathrm{,meas}})",
+    r"\Delta^{\prime17}\mathrm{O^{true}_{smp/wg}} \simeq \Delta^{\prime17}\mathrm{O^{meas}_{smp/wg}}-(1-\lambda_{\mathrm{RL}})  \frac{b_{626}}{(\chi^{\prime\mathrm{wg}}_{626\mathrm{,meas}})^2}  (\chi^{\prime\mathrm{smp}}_{626\mathrm{,meas}}-\chi^{\prime\mathrm{wg}}_{626\mathrm{,meas}})",
 
 ]
 
