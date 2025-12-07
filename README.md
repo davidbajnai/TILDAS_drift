@@ -3,7 +3,7 @@
 
 ## Reference
 >[!IMPORTANT]
->A preprint version of the corresponding manuscript is available at [EGUSphere](https://egusphere.copernicus.org/preprints/2025/egusphere-2025-3040/).
+>Bajnai, D., & Hare, V. J. (2025). Sensitivity of tunable infrared laser spectroscopic measurements of ∆’17O in CO2 to analytical conditions. Atmospheric Measurement Techniques, 18, 7405–7419. [https://doi.org/amt-18-7405-2025](https://doi.org/amt-18-7405-2025).
 
 ## List of Supplementary Data
 
