@@ -3,7 +3,7 @@
 
 ## Reference
 >[!IMPORTANT]
->Bajnai, D., & Hare, V. J. (2025). Sensitivity of tunable infrared laser spectroscopic measurements of ∆’17O in CO2 to analytical conditions. Atmospheric Measurement Techniques, 18, 7405–7419. [https://doi.org/amt-18-7405-2025](https://doi.org/amt-18-7405-2025).
+>Bajnai, D., & Hare, V. J. (2025). Sensitivity of tunable infrared laser spectroscopic measurements of ∆’17O in CO2 to analytical conditions. Atmospheric Measurement Techniques, 18, 7405–7419. [https://doi.org/10.5194/amt-18-7405-2025](https://doi.org/10.5194/amt-18-7405-2025).
 
 ## List of Supplementary Data
 
